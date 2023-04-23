@@ -1,0 +1,160 @@
+﻿@using SwephCalc.UI.Data;
+<RadzenTemplateForm Data="@Model" Submit="@Submit">
+    <DataAnnotationsValidator />
+
+    <RadzenStack Gap="1rem" AlignItems="AlignItems.Normal" JustifyContent="JustifyContent.Start" Orientation="Orientation.Vertical">
+
+        <RadzenFieldset Text="Географическое положение наблюдателя">
+            <RadzenStack Gap="1rem" AlignItems="AlignItems.Normal" JustifyContent="JustifyContent.Start" Orientation="Orientation.Vertical">
+
+                <RadzenRow>
+                    <RadzenColumn Size="3">
+                        <RadzenLabel Text="Широта" />
+                    </RadzenColumn>
+
+                    <RadzenColumn Size="9">
+                        <RadzenStack AlignItems="AlignItems.Start" Gap="0.5rem" Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start">
+                            <RadzenNumeric @bind-Value="Model.Latitude" Step="1" Min="0" Max="90" Style=@RadzenNumericStyle />
+                            @Style.UnitsBadge("°")
+                            <RadzenNumeric @bind-Value="Model.LatitudeMin" Step="0.1" Min="0" Max="59.9m" Style=@RadzenNumericStyle />
+                            @Style.UnitsBadge("'")
+                            <RadzenSelectBar @bind-Value=@Model.IsNorthern>
+                                <Items>
+                                    <RadzenSelectBarItem Text="N" Value="true" />
+                                    <RadzenSelectBarItem Text="S" Value="false" />
+                                </Items>
+                            </RadzenSelectBar>
+                        </RadzenStack>
+                        <ValidationMessage For="() => Model.Latitude" />
+                    </RadzenColumn>
+                </RadzenRow>
+
+                <RadzenRow>
+                    <RadzenColumn Size="3">
+                        <RadzenLabel Text="Долгота" />
+                    </RadzenColumn>
+
+                    <RadzenColumn Size="9">
+                        <RadzenStack AlignItems="AlignItems.Start" Gap="0.5rem" Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start">
+                            <RadzenNumeric @bind-Value="Model.Longitude" Step="1" Min="0" Max="180" Style=@RadzenNumericStyle />
+                            @Style.UnitsBadge("°")
+                            <RadzenNumeric @bind-Value="Model.LongitudeMin" Step="0.1" Min="0" Max="59.9m" Style=@RadzenNumericStyle />
+                            @Style.UnitsBadge("'")
+                            <RadzenSelectBar @bind-Value=@Model.IsEastern>
+                                <Items>
+                                    <RadzenSelectBarItem Text="W" Value="false" />
+                                    <RadzenSelectBarItem Text="E" Value="true" />
+                                </Items>
+                            </RadzenSelectBar>
+                        </RadzenStack>
+                        <ValidationMessage For="() => Model.Longitude" />
+                    </RadzenColumn>
+                </RadzenRow>
+
+                <RadzenRow>
+                    <RadzenColumn Size="3">
+                        <RadzenLabel Text="Высота" />
+                    </RadzenColumn>
+
+                    <RadzenColumn Size="9">
+                        <RadzenStack AlignItems="AlignItems.Start" Gap="0.5rem" Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start">
+                            <RadzenNumeric @bind-Value="Model.Altitude" Step="0.01" Min="0" Max="50" Style=@RadzenNumericStyle />
+                            @Style.UnitsBadge("м")
+                        </RadzenStack>
+                        <ValidationMessage For="() => Model.Altitude" />
+                    </RadzenColumn>
+                </RadzenRow>
+            </RadzenStack>
+        </RadzenFieldset>
+
+        <RadzenFieldset Text="Условия наблюдения">
+            <RadzenStack Gap="1rem" AlignItems="AlignItems.Normal" JustifyContent="JustifyContent.Start" Orientation="Orientation.Vertical">
+
+                <RadzenRow>
+                    <RadzenColumn Size="3">
+                        <RadzenLabel Text="Дата" />
+                    </RadzenColumn>
+
+                    <RadzenColumn Size="9">
+                        <RadzenDatePicker @bind-Value="Model.Date" Style="width: 100%"
+                                          Kind="DateTimeKind.Utc"
+                                          Min="@(new DateTime(1900, 1, 1))"
+                                          Max="@(new DateTime(2100, 1, 1))"
+                                          DateFormat="@Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern" />
+                        <ValidationMessage For="() => Model.Date" />
+                    </RadzenColumn>
+                </RadzenRow>
+
+                <RadzenRow>
+                    <RadzenColumn Size="3">
+                        <RadzenLabel Text="Температура" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="9">
+                        <RadzenStack AlignItems="AlignItems.Start" Gap="0.5rem" Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start">
+                            <RadzenNumeric @bind-Value="Model.Temperature" Style=@RadzenNumericStyle
+                                           Min="(decimal)AstroCatalogue.DeltaT[0][0]"
+                                           Max="(decimal)AstroCatalogue.DeltaT[0][^1]" />
+                            @Style.UnitsBadge("С°")
+                        </RadzenStack>
+                        <ValidationMessage For="() => Model.Temperature" />
+                    </RadzenColumn>
+                </RadzenRow>
+
+                <RadzenRow>
+                    <RadzenColumn Size="3">
+                        <RadzenLabel Text="Давление" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="9">
+                        <RadzenStack AlignItems="AlignItems.Start" Gap="0.5rem" Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start">
+                            <RadzenNumeric @bind-Value="Model.Pressure" Style=@RadzenNumericStyle
+                                           Min="(decimal)AstroCatalogue.DeltaP[0][0].TommHg()"
+                                           Max="(decimal)AstroCatalogue.DeltaP[0][^1].TommHg()" Step="1" />
+                            @Style.UnitsBadge("мм рт.ст.")
+                        </RadzenStack>
+                        <ValidationMessage For="() => Model.Pressure" />
+                    </RadzenColumn>
+                </RadzenRow>
+
+                <RadzenRow>
+                    <RadzenColumn Size="3">
+                        <RadzenLabel Text="КП" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="9">
+                        <RadzenStack AlignItems="AlignItems.Start" Gap="0.5rem" Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start">
+                            <RadzenNumeric @bind-Value="Model.KP" Style=@RadzenNumericStyle Format="0.00"
+                                           Min="0" Max="360" Step="0.01" />
+                            @Style.UnitsBadge("°")
+                        </RadzenStack>
+                        <ValidationMessage For="() => Model.KP" />
+                    </RadzenColumn>
+                </RadzenRow>
+
+                <RadzenRow>
+                    <RadzenColumn Size="3">
+                        <RadzenSelectBar @bind-Value=@Model.Purpose>
+                            <Items>
+                                <RadzenSelectBarItem Text="Восход" Value="SwephExp.SE_CALC_RISE" />
+                                <RadzenSelectBarItem Text="Заход" Value="SwephExp.SE_CALC_SET" />
+                            </Items>
+                        </RadzenSelectBar>
+                    </RadzenColumn>
+                </RadzenRow>
+
+            </RadzenStack>
+        </RadzenFieldset>
+
+        <RadzenButton ButtonType="ButtonType.Submit">Расчитать</RadzenButton>
+    </RadzenStack>
+
+</RadzenTemplateForm>
+
+@code {
+
+    [Parameter]
+    public AzimuthFormModel Model { get; set; }
+
+    [Parameter]
+    public EventCallback<AzimuthFormModel> Submit { get; set; }
+
+    private const string RadzenNumericStyle = "width: 5rem";
+}

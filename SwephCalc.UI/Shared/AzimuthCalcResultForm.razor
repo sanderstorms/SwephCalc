@@ -1,0 +1,172 @@
+﻿<RadzenStack Gap="1rem" AlignItems="AlignItems.Normal" JustifyContent="JustifyContent.Start" Orientation="Orientation.Vertical">
+    <RadzenFieldset Text="Табличное значение A и поправки">
+        <RadzenStack Gap="1rem" AlignItems="AlignItems.Normal" JustifyContent="JustifyContent.Start" Orientation="Orientation.Vertical">
+            <RadzenRow Gap="2rem">
+                <RadzenColumn Size="2">
+                    <RadzenLabel Text="A" />
+                </RadzenColumn>
+
+                <RadzenColumn Size="4">
+                    @Style.DisplayDouble(Model?.At)
+                </RadzenColumn>
+
+            </RadzenRow>
+            <RadzenRow Gap="2rem">
+
+                <RadzenColumn Size="2">
+                    <RadzenLabel Text="∆Аφ" />
+                </RadzenColumn>
+
+                <RadzenColumn Size="4">
+                    @Style.DisplayDouble(Model?.dLatitude)
+                </RadzenColumn>
+
+                <RadzenColumn Size="2">
+                    <RadzenLabel Text="∆Аλ" />
+                </RadzenColumn>
+
+                <RadzenColumn Size="4">
+                    @Style.DisplayDouble(Model?.dLongitude)
+                </RadzenColumn>
+
+            </RadzenRow>
+        </RadzenStack>
+    </RadzenFieldset>
+
+    <RadzenFieldset Text="Поправка за условия">
+        <RadzenStack Gap="1rem" AlignItems="AlignItems.Normal" JustifyContent="JustifyContent.Start" Orientation="Orientation.Vertical">
+            <RadzenRow Gap="2rem">
+                <RadzenColumn Size="2">
+                    <RadzenLabel Text="∆hd" />
+                </RadzenColumn>
+
+                <RadzenColumn Size="4">
+                    @Style.DisplayDouble(Model?.dAltitude)
+                </RadzenColumn>
+
+                <RadzenColumn Size="2">
+                    <RadzenLabel Text="∆ht" />
+                </RadzenColumn>
+
+                <RadzenColumn Size="4">
+                    @Style.DisplayDouble(Model?.dTemperature)
+                </RadzenColumn>
+
+            </RadzenRow>
+
+            <RadzenRow Gap="2rem">
+                <RadzenColumn Size="2">
+                    <RadzenLabel Text="∆hb" />
+                </RadzenColumn>
+
+                <RadzenColumn Size="4">
+                    @Style.DisplayDouble(Model?.dPressure)
+                </RadzenColumn>
+
+                <RadzenColumn Size="2">
+                    <RadzenLabel Text="∆h" />
+                </RadzenColumn>
+
+                <RadzenColumn Size="4">
+                    @Style.DisplayDouble(Model?.dh)
+                </RadzenColumn>
+            </RadzenRow>
+
+            <RadzenRow Gap="2rem">
+                <RadzenColumn Size="2">
+                    <RadzenLabel Text="K" />
+                </RadzenColumn>
+
+                <RadzenColumn Size="4">
+                    @Style.DisplayDouble(Model?.K)
+                </RadzenColumn>
+
+                <RadzenColumn Size="2">
+                    <RadzenLabel Text="∆A" />
+                </RadzenColumn>
+
+                <RadzenColumn Size="4">
+                    @Style.DisplayDouble(Model?.dAzimuth)
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenStack>
+    </RadzenFieldset>
+
+    <RadzenFieldset Text="Итоговые значения расчетов">
+        <RadzenStack Gap="1rem" AlignItems="AlignItems.Normal" JustifyContent="JustifyContent.Start" Orientation="Orientation.Vertical">
+            <RadzenRow Gap="2rem">
+                <RadzenColumn Size="2">
+                    <RadzenStack Gap="0.2rem" AlignItems="AlignItems.Normal"
+                                 JustifyContent="JustifyContent.Start" Orientation="Orientation.Horizontal">
+
+                        <RadzenLabel Text="A" />
+                        <RadzenImage Path="@($"img/{AzimuthImg}_top.svg")" Style="width: 1rem;" />
+                    </RadzenStack>
+                </RadzenColumn>
+
+                <RadzenColumn Size="4">
+                    @Style.DisplayDouble(Model?.AzimuthTop)
+                </RadzenColumn>
+
+                <RadzenColumn Size="2">
+                    <RadzenStack Gap="0.2rem" AlignItems="AlignItems.Normal"
+                                 JustifyContent="JustifyContent.Start" Orientation="Orientation.Horizontal">
+
+                        <RadzenLabel Text="A" />
+                        <RadzenImage Path="@($"img/{AzimuthImg}_bot.svg")" Style="width: 1rem;" />
+                    </RadzenStack>
+                </RadzenColumn>
+
+                <RadzenColumn Size="4">
+                    @Style.DisplayDouble(Model?.AzimuthBot)
+                </RadzenColumn>
+
+            </RadzenRow>
+
+            <RadzenRow Gap="2rem">
+                <RadzenColumn Size="2">
+                    <RadzenLabel Text="∆Ak" />
+                </RadzenColumn>
+
+                <RadzenColumn Size="4">
+                    @Style.DisplayDouble(Model?.dAzimuthAge)
+                </RadzenColumn>
+
+                <RadzenColumn Size="2">
+                    <RadzenLabel Text="КП" />
+                </RadzenColumn>
+
+                <RadzenColumn Size="4">
+                    @Style.DisplayDouble(Model?.KP)
+                </RadzenColumn>
+            </RadzenRow>
+
+            <RadzenRow Gap="2rem">
+                <RadzenColumn Size="2">
+                    <RadzenLabel Text="∆КПв" />
+                </RadzenColumn>
+
+                <RadzenColumn Size="4">
+                    @Style.DisplayDouble(Model?.dKPTop)
+                </RadzenColumn>
+
+                <RadzenColumn Size="2">
+                    <RadzenLabel Text="∆КПн" />
+                </RadzenColumn>
+
+                <RadzenColumn Size="4">
+                    @Style.DisplayDouble(Model?.dKPBot)
+                </RadzenColumn>
+            </RadzenRow>
+
+        </RadzenStack>
+    </RadzenFieldset>
+</RadzenStack>
+
+@code
+{
+    [Parameter]
+    public AzimuthCalcResult Model { get; set; }
+
+    private string AzimuthImg => Model?.Purpose == SwephExp.SE_CALC_RISE ? "rise" : "set";
+}

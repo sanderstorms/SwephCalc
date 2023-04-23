@@ -1,0 +1,36 @@
+﻿@using SwephCalc.UI.Data;
+
+<RadzenFieldset Text="Время восхода/захода Солнца">
+    <RadzenStack Gap="1rem" AlignItems="AlignItems.Normal" JustifyContent="JustifyContent.Start" Orientation="Orientation.Vertical">
+        <RadzenRow Gap="2rem">
+            <RadzenColumn Size="3">
+                <RadzenLabel Text="Время" />
+            </RadzenColumn>
+
+            <RadzenColumn Size="5">
+                <RadzenStack AlignItems="AlignItems.Start" Gap="0.5rem" Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start">
+                    <RadzenTextBox Style="width: 6rem" Value="@Model?.DateTime.ToString("HH:mm:ss")" Disabled="@(Model == null)" />
+                    @Style.UnitsBadge("UTC")
+                </RadzenStack>
+            </RadzenColumn>
+
+        </RadzenRow>
+        <RadzenRow Gap="2rem">
+
+            <RadzenColumn Size="3">
+                <RadzenLabel Text="∆T" />
+            </RadzenColumn>
+
+            <RadzenColumn Size="4">
+                @Style.DisplayDouble(Model?.dT)
+            </RadzenColumn>
+
+        </RadzenRow>
+    </RadzenStack>
+</RadzenFieldset>
+
+@code {
+
+    [Parameter]
+    public SunriseSunsetTimeCalcResult Model { get; set; }
+}

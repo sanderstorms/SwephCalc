@@ -1,0 +1,18 @@
+﻿@code {
+    public const string RadzenNumericStyle = "width: 5rem";
+
+    public static RenderFragment<double?> DisplayDouble = num => __builder =>
+    {
+        <RadzenNumeric Value="num" ReadOnly="true" Style="width: 6rem" Format="0.00" ShowUpDown="false" Disabled="@(!num.HasValue)" />
+    };
+
+    public static RenderFragment<double?> DisplayLongDouble = num => __builder =>
+    {
+        <RadzenNumeric Value="num" ReadOnly="true" Style="width: 7rem" Format="0.00" ShowUpDown="false" Disabled="@(!num.HasValue)" />
+    };
+
+    public static RenderFragment<string> UnitsBadge = text => __builder =>
+    {
+        <RadzenBadge BadgeStyle="BadgeStyle.Primary" Style="font-size: 0.8rem">@text</RadzenBadge>
+    };
+}

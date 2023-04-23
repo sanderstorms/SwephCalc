@@ -1,0 +1,28 @@
+﻿@inherits LayoutComponentBase
+
+<!-- Radzen Lib -->
+<link rel="stylesheet" href="_content/Radzen.Blazor/css/material.css">
+
+<RadzenDialog />
+<RadzenNotification />
+<RadzenContextMenu />
+<RadzenTooltip />
+
+<div class="page">
+    <RadzenLayout Style="width: 100%; height: 100%">
+        <RadzenHeader>
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Style="height: 100%" Gap="0">
+                <RadzenImage Path="img/logo.svg" Style="height: 2rem; margin: 0.5rem" />
+                <RadzenLabel Text="SwephCalc" />
+            </RadzenStack>
+        </RadzenHeader>
+        <RadzenSidebar Expanded="true" Style="width: 250px">
+            <RadzenPanelMenu>
+                <RadzenPanelMenuItem Text="Поправка КУ" Icon="open_with" Path="" />
+            </RadzenPanelMenu>
+        </RadzenSidebar>
+        <RadzenBody>
+            @Body
+        </RadzenBody>
+    </RadzenLayout>
+</div>

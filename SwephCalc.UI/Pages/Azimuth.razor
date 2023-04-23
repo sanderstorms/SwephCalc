@@ -1,0 +1,83 @@
+﻿@page "/"
+@using SwephCalc.UI.Data;
+
+@inject IAzimuthCalculator _azimuthCalculator;
+@inject NotificationService _notificationService;
+
+
+<RadzenStack AlignItems="AlignItems.Start" Gap="1rem" Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start">
+    <RadzenCard Style="width: 30rem; min-width: 30rem; height: 40rem">
+        <AzimuthForm Model="@FormModel" Submit="@Submit" />
+    </RadzenCard>
+    <RadzenCard Style="width: 30rem; min-width: 30rem; height: 40rem;">
+        <AzimuthCalcResultForm Model="@ResultModel" />
+    </RadzenCard>
+    <RadzenCard Style="width: 20rem; min-width: 20rem;">
+        <SunriseSunsetTimeForm Model="@SunriseSunsetTimeModel" />
+    </RadzenCard>
+</RadzenStack>
+
+@code {
+
+    private AzimuthFormModel FormModel { get; set; }
+    private AzimuthCalcResult ResultModel { get; set; }
+    private SunriseSunsetTimeCalcResult SunriseSunsetTimeModel { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        FormModel = new AzimuthFormModel
+            {
+                Date = DateTime.UtcNow.Date,
+                Pressure = Math.Round(AstroCatalogue.StandardPressure.TommHg(), 0),
+                Temperature = AstroCatalogue.StandardTemperature,
+                Altitude = AstroCatalogue.StandardAltitude,
+                IsNorthern = true,
+                IsEastern = true,
+                Purpose = SwephExp.SE_CALC_RISE,
+            };
+    }
+
+    private void Submit(AzimuthFormModel model)
+    {
+        try
+        {
+            var longitude = model.Longitude + model.LatitudeMin / 60d;
+            var latitude = model.Latitude + model.LatitudeMin / 60d;
+            var pressure = model.Pressure.TohPa();
+            var position = new GeoPosition
+                {
+                    Longitude = model.IsEastern ? longitude : -longitude,
+                    Latitude = model.IsNorthern ? latitude : -latitude,
+                    Altitude = model.Altitude,
+                };
+
+
+            ResultModel = _azimuthCalculator.CalculateSunriseSunsetAzimuth(model.Date, position,
+                pressure, model.Temperature, model.Purpose, model.KP);
+
+            SunriseSunsetTimeModel = _azimuthCalculator.CalculateSunriseSunsetTime(model.Date, position,
+                pressure, model.Temperature, model.Purpose);
+
+            _notificationService.Notify(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Success,
+                    Summary = "Рассчет успешно завершен",
+                    Duration = 1000,
+                });
+        }
+        catch (Exception e)
+        {
+            _notificationService.Notify(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "Ошибка",
+                    Detail = e.Message,
+                    CloseOnClick = true,
+                    Duration = 10000,
+                });
+
+            ResultModel = null;
+        }
+    }
+}
